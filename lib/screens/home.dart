@@ -45,7 +45,14 @@ class Home extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                CupertinoButton(
+                    color: CupertinoColors.activeBlue,
+                    child: Text('Ingresar'),
+                    onPressed: () {}),
               ],
             ),
           )
