@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       routes: {'home': (_) => const Home()},
       theme: ThemeData.light().copyWith(
           appBarTheme: AppBarTheme(
-        color: Color.fromARGB(255, 125, 30, 142),
+        color: Color.fromARGB(222, 163, 45, 184),
+        
       )),
       
     );
