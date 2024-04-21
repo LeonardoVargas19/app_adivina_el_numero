@@ -20,6 +20,8 @@ class Header extends StatelessWidget {
     return Container(
       height: 250,
       padding: EdgeInsets.only(top: 20, left: 20),
+      decoration:
+          BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +58,7 @@ class Header extends StatelessWidget {
               if (numberController.text.isNotEmpty && intentos > 0) {
                 registroIngresado(numberController.text);
                 numberController
-                    .clear(); // Limpia el campo después de agregar el número
+                    .clear(); 
               } else {
                 print('No hay número ingresado o no quedan intentos');
               }

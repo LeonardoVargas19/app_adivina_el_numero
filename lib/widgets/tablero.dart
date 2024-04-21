@@ -11,6 +11,7 @@ class tablero extends StatelessWidget {
   final String? hintHigher;
   final String? hintLower;
   final List<String> historial;
+  final double border = 3.0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,8 @@ class tablero extends StatelessWidget {
         Expanded(
           child: Container(
             height: 150,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.purple, width: border)),
             child: Center(
               child: Text(
                 hintHigher ?? "Ingrese un número menor",
@@ -30,6 +33,8 @@ class tablero extends StatelessWidget {
         Expanded(
           child: Container(
             height: 150,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.purple, width: border)),
             child: Center(
               child: Text(
                 hintLower ?? "Ingrese un número mayor",
@@ -42,7 +47,9 @@ class tablero extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 150, // Adjusted height to accommodate slider below
+                height: 150,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.purple, width: border)),
                 child: ListView.builder(
                   itemCount: historial.length,
                   itemBuilder: (context, index) {

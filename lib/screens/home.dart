@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   List<String> historial = [];
   final TextEditingController numberController = TextEditingController();
   int intentos = 5;
-  int? randomNumber;
+  int? randomNum;
   String? hintLower;
   String? hintHigher;
   double difficultyLevel = 0;
@@ -24,10 +24,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    randomNumber = Random().nextInt(100) + 1;
+    randomNum = Random().nextInt(100) + 1;
   }
 
-  void showIosDialog(String title, String content, VoidCallback callback) {
+  void mostrarDialogo(String title, String content, VoidCallback callback) {
     showCupertinoDialog(
       context: context,
       builder: (ctx) => CupertinoAlertDialog(
@@ -47,13 +47,13 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void checkNumber(String value) {
+  void validarNumero(String value) {
     if (intentos > 0) {
       int numValue = int.parse(value);
       setState(() {
         historial.add(value);
         intentos--; // Resta un intento cada vez que se agrega un valor
-        if (numValue > randomNumber!) {
+        if (numValue > randomNum!) {
           hintLower = "Menor que $value";
           hintHigher = null;
         } else {
@@ -62,27 +62,27 @@ class _HomeState extends State<Home> {
         }
       });
 
-      if (numValue == randomNumber) {
-        showIosDialog(
+      if (numValue == randomNum) {
+        mostrarDialogo(
           '¡Felicidades!',
           'Has adivinado el número correctamente.',
-          restartGame,
+          reiniciar,
         );
       } else if (intentos == 0) {
-        showIosDialog(
+        mostrarDialogo(
           '¡Juego terminado!',
-          'Te has quedado sin intentos. El número era $randomNumber.',
-          restartGame,
+          'Te has quedado sin intentos. El número era $randomNum.',
+          reiniciar,
         );
       }
     }
   }
 
-  void restartGame() {
+  void reiniciar() {
     setState(() {
       historial.clear();
       intentos = 5;
-      randomNumber = Random().nextInt(100) + 1;
+      randomNum = Random().nextInt(100) + 1;
       hintLower = null;
       hintHigher = null;
     });
@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
               numberController: numberController,
               historial: historial,
               intentos: intentos,
-              registroIngresado: checkNumber,
+              registroIngresado: validarNumero,
             ),
             tablero(
                 hintHigher: hintHigher,
@@ -113,69 +113,70 @@ class _HomeState extends State<Home> {
             Container(
               width: double.infinity,
               height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Slider.adaptive(
-                      value: difficultyLevel,
-                      min: 0,
-                      max: 3,
-                      divisions: 3,
-                      label: [
-                        'Fácil',
-                        'Medio',
-                        'Avanzado',
-                        'Extremo'
-                      ][difficultyLevel.toInt()],
-                      onChanged: (newRating) {
-                        setState(() {
-                          difficultyLevel = newRating;
-                          switch (difficultyLevel.toInt()) {
-                            case 0: // Fácil
-                              randomNumber = Random().nextInt(10) + 1;
-                              intentos = 5;
-                              break;
-                            case 1: // Medio
-                              randomNumber = Random().nextInt(20) + 1;
-                              intentos = 8;
-                              break;
-                            case 2: // Avanzado
-                              randomNumber = Random().nextInt(100) + 1;
-                              intentos = 15;
-                              break;
-                            case 3: // Extremo
-                              randomNumber = Random().nextInt(1000) + 1;
-                              intentos = 25;
-                              break;
-                            default:
-                              randomNumber = Random().nextInt(100) + 1;
-                              intentos = 5;
-                          }
-                          historial
-                              .clear(); // Limpiar historial al cambiar de dificultad
-                          hintLower = null;
-                          hintHigher = null;
-                        });
-                      },
-                    ),
-
-                  ),
-                  Text(
-                    [
-                      'Fácil',
-                      'Medio',
-                      'Avanzado',
-                      'Extremo'
-                    ][difficultyLevel.toInt()],
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+              child: dificultad(),
             )
           ],
         ),
       ),
     );
+  }
+
+  Row dificultad() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Slider.adaptive(
+            value: difficultyLevel,
+            min: 0,
+            max: 3,
+            divisions: 3,
+            label: [
+              'Fácil',
+              'Medio',
+              'Avanzado',
+              'Extremo'
+            ][difficultyLevel.toInt()],
+            onChanged: (newRating) {
+              seleccionarDificultad(newRating);
+            },
+          ),
+        ),
+        Text(
+          ['Fácil', 'Medio', 'Avanzado', 'Extremo'][difficultyLevel.toInt()],
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  void seleccionarDificultad(double newRating) {
+    return setState(() {
+      difficultyLevel = newRating;
+      switch (difficultyLevel.toInt()) {
+        case 0: // Fácil
+          randomNum = Random().nextInt(10) + 1;
+          intentos = 5;
+          break;
+        case 1: // Medio
+          randomNum = Random().nextInt(20) + 1;
+          intentos = 8;
+          break;
+        case 2: // Avanzado
+          randomNum = Random().nextInt(100) + 1;
+          intentos = 15;
+          break;
+        case 3: // Extremo
+          randomNum = Random().nextInt(1000) + 1;
+          intentos = 25;
+          break;
+        default:
+          randomNum = Random().nextInt(100) + 1;
+          intentos = 5;
+      }
+      historial.clear(); // Limpiar historial al cambiar de dificultad
+      hintLower = null;
+      hintHigher = null;
+    });
   }
 }
